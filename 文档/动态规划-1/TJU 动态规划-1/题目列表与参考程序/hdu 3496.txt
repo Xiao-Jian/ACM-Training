@@ -1,0 +1,50 @@
+#include <algorithm>
+#include <iostream>
+#include <cstring>
+#include <cstdio>
+using namespace std;
+
+const int INF = -99999999;
+const int N = 101;
+const int L = 1001;
+int dp[N][L];
+int n, m, l;
+
+void init()
+{
+    memset( dp, -1, sizeof(dp) );
+    for ( int j = 0; j < L; j++ )
+    {
+        dp[0][j] = 0;
+    }
+}
+
+int main ()
+{
+    int t;
+    scanf("%d", &t);
+    while ( t-- )
+    {
+        scanf("%d%d%d", &n, &m, &l);
+        init();
+        for ( int i = 1; i <= n; i++ )
+        {
+            int time, value;
+            scanf("%d%d", &time, &value);
+            for ( int j = m; j > 0; j-- )
+            {
+                for ( int k = time; k <= l; k++ )
+                //for ( int k = l; k >= time; k-- )
+                {
+                    if ( dp[j - 1][k - time] != -1 )
+                    {
+                        dp[j][k] = max( dp[j][k], dp[j - 1][k - time] + value );
+                    }
+                }
+            }
+        }
+        int ans = dp[m][l] == -1 ? 0 : dp[m][l];
+        printf("%d\n", ans);
+    }
+    return 0;
+}

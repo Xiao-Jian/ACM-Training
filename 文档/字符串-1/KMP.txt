@@ -1,0 +1,54 @@
+char s[100010],t[1010];
+int n,m;
+int next[1010];
+/*
+* next[]的含义：x[i-next[i]...i-1]=x[0...next[i]-1]
+* next[i]为满足x[i-z...i-1]=x[0...z-1]的最大z值（就是x的自身匹配）
+*/
+
+void getnext()
+{
+    next[0]=-1;//next[0]=-1
+    int i=0,j=-1;
+    while(i<m)
+    {
+        while(j!=-1&&t[i]!=t[j])j=next[j];//失配的时候j返回到上一个匹配成功的位置
+        next[++i]=++j;
+    }
+}
+
+/*
+* next[]的意思：next'[i]=next[next[...[next[i]]]]
+*(直到next'[i]<0或者x[next'[i]]!=x[i])
+* 这样的预处理可以快一些
+*/
+
+void getnext()
+{
+    next[0]=-1;
+    int i=0,j=-1;
+    while(i<m)
+    {
+        while(j!=-1&&t[i]!=t[j])j=next[j];
+        if(t[++i]==t[++j])next[i]=next[j];
+        else next[i]=j;
+    }
+}
+
+int kmp()
+{
+    int ans=0;
+    getnext();
+    int i=0,j=0;
+    while(i<n)
+    {
+        while(j!=-1&&s[i]!=t[j])j=next[j];
+        i++,j++;
+        if(j>=m)
+        {
+            ans++;
+            j=next[j];
+        }
+    }
+    return ans;
+}

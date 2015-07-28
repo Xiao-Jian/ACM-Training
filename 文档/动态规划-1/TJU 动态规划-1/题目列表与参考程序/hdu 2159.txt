@@ -1,0 +1,43 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+const int N = 101;
+int dp[N][N];
+int n, m, k, s;
+int val, cost;
+
+int main ()
+{
+  while ( cin >> n >> m >> k >> s )
+  {
+    memset( dp, 0, sizeof(dp) );
+    for ( int i = 1; i <= k; i++ )
+    {
+      cin >> val >> cost;
+      for ( int j = cost; j <= m; j++ )
+      {
+        for ( int l = 1; l <= s; l++ )
+        {
+          dp[j][l] = max( dp[j][l], dp[j - cost][l - 1] + val );
+        }
+      }
+    }
+    if ( dp[m][s] < n )
+    {
+      cout << -1 << endl;
+      continue;
+    }
+    int ans;
+    for ( int i = 0; i <= m; i++ )
+    {
+      if ( dp[i][s] >= n )
+      {
+        ans = m - i;
+        break;
+      }
+    }
+    cout << ans << endl;
+  }
+  return 0;
+}

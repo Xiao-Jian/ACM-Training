@@ -1,0 +1,48 @@
+#include <iostream>
+#include <cstring>
+#include <cstdio>
+using namespace std;
+
+const int N = 5000;
+const int M = 250001;
+int v[N];
+int f[M];
+
+int main ()
+{
+  int n, sum, val, num, cnt;
+  while ( scanf("%d", &n), n >= 0 )
+  {
+    sum = cnt = 0;
+    for ( int i = 0; i < n; i++ )
+    {
+      scanf("%d%d", &val, &num);
+      sum += val * num;
+      int k = 1;
+      while ( num >= k )
+      {
+        v[cnt++] = k * val;
+        num -= k;
+        k = ( k << 1 );
+      }
+      if ( num )
+      {
+        v[cnt++] = num * val;
+      }
+    }
+    memset( f, 0, sizeof(f) );
+    int m = ( sum >> 1 );
+    for ( int i = 0; i < cnt; i++ )
+    {
+      for ( int j = m; j >= v[i]; j-- )
+      {
+        if ( f[j] < f[j - v[i]] + v[i] )
+        {
+          f[j] = f[j - v[i]] + v[i];
+        }
+      }
+    }
+    printf("%d %d\n", sum - f[m], f[m]);
+  }
+  return 0;
+}

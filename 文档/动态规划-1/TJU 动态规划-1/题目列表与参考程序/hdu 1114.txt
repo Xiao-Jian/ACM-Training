@@ -1,0 +1,66 @@
+#include <iostream>
+#include <cstring>
+#include <cstdio>
+using namespace std;
+
+const int INF = 1111111111;
+const int M = 10000;
+const int N = 500;
+int dp[M];
+int n, c;
+
+struct Node
+{
+  int p, w;
+} node[N];
+
+void init()
+{
+  dp[0] = 0;
+  for ( int i = 1; i <= c; i++ )
+  {
+    dp[i] = INF;
+  }
+}
+
+void get()
+{
+  init();
+  for ( int i = 0; i < n; i++ )
+  {
+    for ( int j = node[i].w; j <= c; j++ )
+    {
+      if ( dp[j - node[i].w] + node[i].p < dp[j] )
+      {
+        dp[j] = dp[j - node[i].w] + node[i].p;
+      }
+    }
+  }
+}
+
+int main ()
+{
+  int t;
+  scanf("%d", &t);
+  while ( t-- )
+  {
+    int e, f;
+    scanf("%d%d%d", &e, &f, &n);
+    c = f - e;
+    for ( int i = 0; i < n; i++ )
+    {
+      scanf("%d%d", &node[i].p, &node[i].w);
+    }
+    get();
+    int ans = dp[c];
+    if ( ans == INF )
+    {
+      printf("This is impossible.\n");
+    }
+    else
+    {
+      printf("The minimum amount of money in the piggy-bank is %d.\n", ans);
+    }
+  }
+  return 0;
+}

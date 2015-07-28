@@ -1,0 +1,67 @@
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+using namespace std;
+
+const int N = 6001;
+int head[N];
+int id[N];
+int dp[N][2];
+int n, e;
+
+struct Edge
+{
+  int v, next;
+} edge[N - 3];
+
+void addEdge( int u, int v )
+{
+  edge[e].v = v;
+  edge[e].next = head[u];
+  head[u] = e++;
+}
+
+void dfs( int u )
+{
+  for ( int i = head[u]; i != -1; i = edge[i].next )
+  {
+    int v = edge[i].v;
+    dfs(v);
+    dp[u][0] += max( dp[v][0], dp[v][1] );
+    dp[u][1] += dp[v][0];
+  }
+}
+
+int main ()
+{
+  while ( scanf("%d", &n) != EOF )
+  {
+    memset( head, -1, sizeof(head) );
+    memset( id, 0, sizeof(id) );
+    for ( int i = 1; i <= n; i++ )
+    {
+      scanf("%d", &dp[i][1]);
+      dp[i][0] = 0;
+    }
+    int a, b;
+    e = 0;
+    while ( scanf("%d%d", &b, &a), a + b )
+    {
+      addEdge( a, b );
+      id[b]++;
+    }
+    int root;
+    for ( int i = 1; i <= n; i++ )
+    {
+      if ( !id[i] )
+      {
+        root = i;
+        break;
+      }
+    }
+    dfs(root);
+    int ans = max( dp[root][0], dp[root][1] );
+    printf("%d\n", ans);
+  }
+  return 0;
+}

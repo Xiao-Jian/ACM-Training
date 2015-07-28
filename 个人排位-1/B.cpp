@@ -1,4 +1,4 @@
-//最小生成树+并查集
+//最小生成树+并查集Kruskal
 #include <cstdio>
 #include <iostream>
 #include <cstring>

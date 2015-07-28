@@ -1,0 +1,60 @@
+#include <algorithm>
+#include <cstdio>
+using namespace std;
+
+const int N = 100;
+int dp[N];
+
+struct Node
+{
+    int x, y, z;
+    bool operator < ( const Node & o ) const
+    {
+        if ( x != o.x ) return x < o.x;
+        return y < o.y;
+    }
+    Node(){}
+    Node( int _x, int _y, int _z )
+    {
+        x = _x, y = _y, z = _z;
+    }
+    void standard()
+    {
+        if ( x > y ) swap( x, y );
+    }
+} node[N];
+
+int main ()
+{
+    int n, _case = 1;
+    while ( scanf("%d", &n), n )
+    {
+        for ( int i = 0; i < n; i++ )
+        {
+            int x, y, z;
+            scanf("%d%d%d", &x, &y, &z);
+            node[i * 3] = Node( x, y, z );
+            node[i * 3].standard();
+            node[i * 3 + 1] = Node( x, z, y );
+            node[i * 3 + 1].standard();
+            node[i * 3 + 2] = Node( y, z, x );
+            node[i * 3 + 2].standard();
+        }
+        sort( node, node + 3 * n );
+        int ans = -1;
+        for ( int i = 0; i < 3 * n; i++ )
+        {
+            dp[i] = node[i].z;
+            for ( int j = 0; j < i; j++ )
+            {
+                if ( node[j].x < node[i].x && node[j].y < node[i].y )
+                {
+                    dp[i] = max( dp[i], dp[j] + node[i].z );
+                }
+            }
+            ans = max( ans, dp[i] );
+        }
+        printf("Case %d: maximum height = %d\n", _case++, ans);
+    }
+    return 0;
+}

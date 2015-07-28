@@ -1,0 +1,97 @@
+#include <iostream>
+#include <cstring>
+#include <cstdio>
+using namespace std;
+
+const int INF = -999999999;
+const int N = 100001;
+const int M = 1000001;
+int head[N];
+int val[N];
+int dp[N];
+int in[N];
+int q[N];
+int n, m, e;
+int ans;
+
+struct Edge
+{
+  int v, next;
+} edge[M];
+
+void addEdge( int u, int v )
+{
+  edge[e].v = v;
+  edge[e].next = head[u];
+  head[u] = e++;
+}
+
+void init()
+{
+  e = 0;
+  memset( in, 0, sizeof(in) );
+  memset( head, -1, sizeof(head) );
+  for ( int i = 1; i <= n; i++ )
+  {
+    dp[i] = INF;
+  }
+}
+
+void topo()
+{
+  int front = 0, rear = 0;
+  for ( int i = 1; i <= n; i++ )
+  {
+    if ( !in[i] )
+    {
+      q[rear++] = i;
+      dp[i] = val[i];
+    }
+  }
+  while ( front < rear )
+  {
+    int u = q[front++];
+    bool flag = true;
+    for ( int i = head[u]; i != -1; i = edge[i].next )
+    {
+      flag = false;
+      int v = edge[i].v;
+      if ( dp[u] + val[v] > dp[v] )
+      {
+        dp[v] = dp[u] + val[v];
+      }
+      in[v]--;
+      if ( !in[v] )
+      {
+        q[rear++] = v;
+      }
+    }
+    if ( flag && dp[u] > ans )
+    {
+      ans = dp[u];
+    }
+  }
+}
+
+int main ()
+{
+  while ( scanf("%d%d", &n, &m) != EOF )
+  {
+    init();
+    for ( int i = 1; i <= n; i++ )
+    {
+      scanf("%d", &val[i]);
+    }
+    while ( m-- )
+    {
+      int a, b;
+      scanf("%d%d", &a, &b);
+      addEdge( a, b );
+      in[b]++;
+    }
+    ans = INF;
+    topo();
+    printf("%d\n", ans);
+  }
+  return 0;
+}

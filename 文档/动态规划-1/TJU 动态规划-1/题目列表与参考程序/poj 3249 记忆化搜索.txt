@@ -1,0 +1,94 @@
+//要注意：val[i]的值可能是负的，
+//所以dp[i]不能初始化为-1,应该
+//初始化成一个极小值
+#include <iostream>
+#include <cstring>
+#include <cstdio>
+using namespace std;
+
+const int INF = -999999999;
+const int N = 100001;
+const int M = 1000001;
+int head[N];
+int val[N];
+int dp[N];
+int in[N];
+int n, m, e;
+
+struct Edge
+{
+  int v, next;
+} edge[M];
+
+void addEdge( int u, int v )
+{
+  edge[e].v = v;
+  edge[e].next = head[u];
+  head[u] = e++;
+}
+
+void init()
+{
+  e = 0;
+  memset( in, 0, sizeof(in) );
+  memset( head, -1, sizeof(head) );
+  for ( int i = 1; i <= n; i++ )
+  {
+    dp[i] = INF;
+  }
+}
+
+int dfs( int u )
+{
+  if ( dp[u] != INF )
+  {
+    return dp[u];
+  }
+  int inc = INF;
+  for ( int i = head[u]; i != -1; i = edge[i].next )
+  {
+    int tmp = dfs(edge[i].v);
+    if ( tmp > inc )
+    {
+      inc = tmp;
+    }
+  }
+  if ( inc == INF )
+  {
+    inc = 0;
+  }
+  return ( dp[u] = val[u] + inc );
+}
+
+int main ()
+{
+  while ( scanf("%d%d", &n, &m) != EOF )
+  {
+    init();
+    for ( int i = 1; i <= n; i++ )
+    {
+      scanf("%d", &val[i]);
+    }
+    while ( m-- )
+    {
+      int a, b;
+      scanf("%d%d", &a, &b);
+      addEdge( b, a );
+      in[a]++;
+    }
+    int res = INF;
+    for ( int i = 1; i <= n; i++ )
+    {
+      if ( !in[i] )
+      {
+        int tmp = dfs(i);
+        if ( tmp > res )
+        {
+          res = tmp;
+        }
+      }
+    }
+    printf("%d\n", res);
+  }
+  return 0;
+}

@@ -1,9 +1,9 @@
 /*
-OJ: HDOJ
+OJ: POJ
 ID: forever
 TASK: 1308.Is It A Tree?
 LANG: C++
-NOTE: ²¢²é¼¯
+NOTE: Find-Union
 */
 #include <cstdio>
 

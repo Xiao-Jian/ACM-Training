@@ -1,0 +1,69 @@
+#include <iostream>
+#include <cstring>
+#include <cstdio>
+using namespace std;
+
+const int N = 20001;
+int head[N];
+int balance[N];
+int child[N];
+int n, e;
+
+struct Edge
+{
+	int v, next;
+} edge[N * 2];
+
+void addEdge( int u, int v )
+{
+	edge[e].v = v;
+	edge[e].next = head[u];
+	head[u] = e++;
+}
+
+void dfs( int u, int fa )
+{
+	balance[u] = 0;
+	child[u] = 1;
+	for ( int i = head[u]; i != -1; i = edge[i].next )
+	{
+		int v = edge[i].v;
+		if ( v != fa )
+		{
+			dfs( v, u );
+			balance[u] = max( balance[u], child[v] );
+			child[u] += child[v];
+		}
+	}
+	balance[u] = max( balance[u], n - child[u] );
+}
+
+int main ()
+{
+	int t;
+	scanf("%d", &t);
+	while ( t-- )
+	{
+		scanf("%d", &n);
+		e = 0;
+		memset( head, -1, sizeof(head) );
+		for ( int i = 1; i < n; i++ )
+		{
+			int u, v;
+			scanf("%d%d", &u, &v);
+			addEdge( u, v );
+			addEdge( v, u );
+		}
+		dfs( 1, -1 );
+		int ans = 1;
+		for ( int i = 2; i <= n; i++ )
+		{
+			if ( balance[i] < balance[ans] )
+			{
+				ans = i;
+			}		
+		}
+		printf("%d %d\n", ans, balance[ans]);
+	}
+	return 0;
+}

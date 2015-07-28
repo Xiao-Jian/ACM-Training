@@ -1,0 +1,75 @@
+#include <algorithm>
+#include <iostream>
+#include <cstring>
+#include <cstdio>
+using namespace std;
+
+const int N = 1500;
+bool flag[N];
+int head[N];
+int dp[N][2];
+int e, n;
+
+void init()
+{
+    e = 0;
+    memset( flag, true, sizeof(flag) );
+    memset( head, -1, sizeof(head) );
+}
+
+struct Edge
+{
+    int v, next;
+} edge[N];
+
+void addEdge( int u, int v )
+{
+    edge[e].v = v;
+    edge[e].next = head[u];
+    head[u] = e++;
+}
+
+void dfs( int u )
+{
+    dp[u][0] = 0;
+    dp[u][1] = 1;
+    for ( int i = head[u]; i != -1; i = edge[i].next )
+    {
+        int v = edge[i].v;
+        dfs(v);
+        dp[u][0] += dp[v][1];
+        dp[u][1] += min( dp[v][0], dp[v][1] );
+    }
+}
+
+int main ()
+{
+    while ( scanf("%d", &n) != EOF )
+    {
+        init();
+        for ( int i = 0; i < n; i++ )
+        {
+            int u, v, m;
+            scanf("%d:(%d)", &u, &m);
+            while ( m-- )
+            {
+                scanf("%d", &v);
+                addEdge( u, v );
+                flag[v] = false;
+            }
+        }
+        int root;
+        for ( int i = 0; i < n; i++ )
+        {
+            if ( flag[i] )
+            {
+                root = i;
+                break;
+            }
+        }
+        dfs(root);
+        int ans = min( dp[root][0], dp[root][1] );
+        printf("%d\n", ans);
+    }
+    return 0;
+}
