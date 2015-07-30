@@ -11,7 +11,6 @@
 #define sign(x) (x>eps?1:(x<-eps?-1:0))
 using namespace std;
 
-//点
 struct point {
 	double x, y;
 	point() {};
@@ -19,19 +18,23 @@ struct point {
 		x = _x;
 		y = _y;
 	}
-	point operator - ( const point& ne ) {
+	point operator - ( const point& ne ) const {
 		return point( x - ne.x, y - ne.y );
 	}
-	point operator + ( const point& ne ) {
+	point operator + ( const point& ne ) const {
 		return point( x + ne.x, y + ne.y );
 	}
-	point operator * ( const double t ) {
+	point operator * ( const double t ) const {
 		return point( x * t, y * t );
 	}
-	point operator / ( const double t ) {
+	point operator / ( const double t ) const {
 		if( sign(t) == 0) exit(1);
 		return point( x / t, y / t );
 	}
+	//叉积
+    double operator ^ ( const point& b ) const {
+        return x*b.y - y*b.x;
+    }
 };
 //直线或线段
 struct line {
@@ -41,6 +44,29 @@ struct line {
 		a = _a;
 		b = _b;
 	}
+	//两直线相交求交点
+    //第一个值为0表示直线重合，为1表示平行，为0表示相交,为2是相交
+    //只有第一个值为2时，交点才有意义
+    pair<int,point> operator & (const line& p)const
+    {
+        point res = a;
+        double x = (a-b) ^ (p.a-p.b);
+        if(sign(x) == 0)
+        {
+            x = (a-p.b)^(p.a-p.b);
+            if(sign(x) == 0)
+                return make_pair(0,res);//重合
+            else return make_pair(1,res);//平行
+        }
+        double t = ((a-p.a)^(p.a-p.b))/((a-b)^(p.a-p.b));
+        res.x += (b.x-a.x)*t;
+        res.y += (b.y-a.y)*t;
+        return make_pair(2,res);
+    }
+    /**************调用************
+    pair<int, point> pr;
+    point p = pr.second;
+    ************交点为p***********/
 };
 //圆
 struct circle {

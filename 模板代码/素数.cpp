@@ -35,7 +35,7 @@ void prime2() {
     isPrime[0] = isPrime[1] = false;
     for( int i = 2; i <= MAX; i ++ )
         if( isPrime[i] ) {
-            for( int j = i * i; j <= MAX; j += i )
+            for( int j = 2 * i; j <= MAX; j += i )
                 isPrime[j] = false;
         }
 }
