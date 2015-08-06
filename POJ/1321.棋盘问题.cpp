@@ -5,55 +5,63 @@ TASK: 1321.∆Â≈ÃŒ Ã‚
 LANG: C++
 NOTE: DFS
 */
-#include <cstdio>
-#include <iostream>
-#include <algorithm>
-#include <cstring>
-#include <vector>
+#include<iostream>
+#include<cstdlib>
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<cmath>
 using namespace std;
-
-int n, k, ans;
-char str[10][10];
-vector< pair< int, int > > v;
-int rvis[100], cvis[100];
-
-void dfs(int s, int rt) {
-    if( rt == k ) {
-        ans ++;
-        return;
-    }
-
-    for( int i = s; i < v.size(); i ++ ) {
-        pair<int, int> pr = v.front();
-        int tmpi = pr.first, tmpj = pr.second;
-        if( !rvis[tmpi] && !cvis[tmpj] ) {
-            cvis[tmpi] = 1;
-            rvis[tmpj] = 1;
-            dfs( s + 1, rt + 1 );
-            cvis[tmpi] = 0;
-            rvis[tmpj] = 0;
-        }
-    }
-
-}
-
-int main()
+struct prog {
+    char map [10][10];
+    int x;
+};
+int m;
+int ans;
+void DFS(prog tmp,int n)
 {
-    while( scanf( "%d%d", &n, &k ) !=EOF ) {
-        if( n == -1 && k == -1 ) break;
-        for( int i = 0; i < n; i ++ ) {
-            scanf( "%s", &str );
-            for( int j = 0; j < n; j ++ ) {
-                if( str[i][j] =='#' ) {
-                    v.push_back( make_pair(i, j) );
+    if(n==0)
+    {
+        ans++;
+        return ;
+    }
+    int i , j ;
+    for ( i = tmp.x + 1 ; i <= m -n; i ++ )
+    {
+        for ( j = 0 ; j < m ; j ++ )
+        {
+            if ( tmp.map[i][j]=='#')
+            {
+                prog tmp2;
+                tmp2=tmp;
+                tmp2.x=i;
+                int k;
+                for (k = i+1 ; k < m ; k ++)
+                {
+                    tmp2.map[k][j]='.';
                 }
+                DFS(tmp2,n-1);
+
             }
         }
-        memset( cvis, 0, sizeof(cvis) );
-        memset( rvis, 0, sizeof(rvis) );
-        ans = 0;
-        //if( dfs( 0, 0 ) )
-        dfs( 0, 0 );
-            printf( "%d\n", ans );
     }
+}
+int main()
+{
+
+    int  n ;
+    while ( cin >> m >> n , m != -1 || n != -1 )
+    {
+        ans=0;
+        prog map;
+        map.x=-1;
+        int i;
+        for ( i = 0 ; i < m ; i ++ )
+        {
+            cin >> map . map [ i ];
+        }
+        DFS(map,n);
+        cout<<ans<<endl;
+    }
+    return 0;
 }
