@@ -1,30 +1,52 @@
-#include<iostream>
-#include<algorithm>
-#include<cmath>
-#include<cstdio>
-#include<complex>
-#include<cstring>
-#include<string>
-#include<iomanip>
+#include <iostream>
+#include <cstdlib>
+#include <cstring>
+#include <cstdio>
 using namespace std;
-#define max(a,b)  (a>b?a:b)
-#define min(a,b)  (a<b?a:b)
-#define eps 1e-8
-#define zero(x)   (((x)>0?(x):-(x))<eps)
 
+struct Node {
+    int x, next;
+}e[200005];
 
-int main()
-{
+int N, head[100005], idx, ret, sum[100005], hash[100005];
 
-    char s1[] = "1110";
-    char s2[] = "1101";
-    puts(s1);
-    puts(s2);
-    printf( "%d\n", strcmp(s1,s2));
-    if( strcmp(s1, s2) )
-        puts("1");
-    else if( strcmp(s1,s2) )
-        puts( "2");
-    else
-        puts("0");
+void insert(int x, int y) {
+    ++idx;
+    e[idx].x = y;
+    e[idx].next = head[x];
+    head[x] = idx;
+}
+
+int update(int x) {
+    hash[x] = 1;
+    if (head[x] == -1) {
+        return sum[x] = 1;
+    } else {
+        sum[x] = 1;
+        for (int i = head[x]; i != -1; i = e[i].next) {
+            if (!hash[e[i].x]) {
+                sum[x] += update(e[i].x);
+            }
+        }
+        if (!(sum[x] & 1)) ++ret;
+        return sum[x];
+    }
+}
+
+int main() {
+    int ans;
+    while (scanf("%d", &N) == 1) {
+        memset(head, 0xff, sizeof (head));
+        memset(hash, 0, sizeof (hash));
+        int x, y;
+        idx = ret = -1;
+        for (int i = 1; i < N; ++i) {
+            scanf("%d %d", &x, &y);
+            insert(x, y); // 对这个树进行构边
+            insert(y, x); // 构建的双向边
+        }
+        update(1);
+        printf("%d\n", ret);
+    }
+    return 0;
 }
