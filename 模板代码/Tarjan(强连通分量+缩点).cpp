@@ -1,10 +1,4 @@
-/*
-OJ: HDOJ
-ID: 3013216109
-TASK: 3639.Hawk-and-Chicken
-LANG: C++
-NOTE: Tarjan(强连通分量+缩点)
-*/
+//Tarjan(强连通分量+缩点)
 #include <cstdio>
 #include <iostream>
 #include <cstring>

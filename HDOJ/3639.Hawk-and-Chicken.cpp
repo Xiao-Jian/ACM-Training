@@ -1,6 +1,6 @@
 /*
 OJ: HDOJ
-ID: 3013216109
+ID: forever
 TASK: 3639.Hawk-and-Chicken
 LANG: C++
 NOTE: Tarjan(强连通分量+缩点)
@@ -19,7 +19,8 @@ struct edge {
 }e[30010];
 int head[MAX], cnt;
 
-int dfn[MAX], low[MAX], vis[MAX], scc[MAX], ans[MAX], id[MAX], in[MAX], ins[MAX];
+int dfn[MAX], low[MAX], vis[MAX], scc[MAX];
+int ans[MAX], id[MAX], in[MAX], ins[MAX];
 int time, num, sum;
 stack<int> s;
 

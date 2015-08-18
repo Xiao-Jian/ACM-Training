@@ -8,8 +8,9 @@
 #define MAX 1000011
 using namespace std;
 
-int num[50],f[MAX];
+int num[10],f[MAX];
 bool isPrime[MAX];
+int dp[10][MAX];
 
 void prime2() {
     memset( isPrime, true, sizeof(isPrime) );
@@ -22,6 +23,11 @@ void prime2() {
                 f[j] ++;
             }
         }
+    for( int i = 1; i <= MAX; i ++ ) {
+        for( int j = 1; j <= 8; j ++ ) {
+            dp[j][i] = dp[j][i-1] + ( f[i] == j );
+        }
+    }
 }
 
 int gcd( int a, int b ) {
@@ -32,33 +38,18 @@ int main()
 {
     int t, l, r;
     memset( f, 0, sizeof(f) );
+    memset( dp, 0, sizeof(dp) );
     prime2();
-    int flag1=0,flag2=0;
-    for ( int i = 2;i < MAX; i ++  ) {
-        if( f[i] == 6) flag1 ++;
-        if(f[i] == 7) flag2++;
-    }
 
-    //2printf("%d %d\n", flag1,flag2);
     scanf( "%d", &t );
     while( t -- ) {
         scanf( "%d%d", &l, &r );
         int ma = 0;
         memset(num, 0 ,sizeof(num));
-        for ( int i = l; i <= r; i ++ ) {
-            num[f[i]] ++;
+        for ( int i = 1; i <= 8; i ++ ) {
+            num[i] = dp[i][r] - dp[i][l-1];
         }
-        ma = 0;
-        for( int i = 1; i < 50; i ++ )
-            if(num[i]>=2) ma=i;
-            /*
-        for( int i = 1; i < 50; i ++ ) {
-            for( int j = i + 1; j < 50; j ++ ) {
-                if(num[i]&&num[j])
-                    ma = max(ma, gcd(i,j));
-            }
-        }
-        */
+
         int ret = 1;
         if(num[2] + num[4] + num[6]>=2) ret = 2;
         if(num[3] + num[6] >= 2) ret = 3;

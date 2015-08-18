@@ -9,7 +9,7 @@ void init()
     for(int i = 2; i <= 1000000; i++) if(!flag[i]){
         F[i]++;
         for(int j = i + i; j <= 1000000; j += i) {
-            flag[j] = true;    
+            flag[j] = true;
             F[j]++;
         }
     }
@@ -19,6 +19,7 @@ void init()
         }
     }
 }
+
 int main()
 {
     freopen("in.txt", "r", stdin);
